@@ -284,12 +284,7 @@ PostHog is initialized in `src/hooks/useTracking.ts` and currently tracks `ar_se
 4. Add checkout, favorites, and authenticated user flows
 5. Expand observability dashboards and production deployment automation
 
-## Git Identity
-
-This repo is currently configured with:
-- Git user: `lxcario`
-- Git email: `resquedzn05@gmail.com`
-
 ## License
 
-No license file is currently included in this repository.
+See [LICENSE](./LICENSE).
+
