@@ -1,4 +1,4 @@
-import { ArrowRight, Box, Ruler } from "lucide-react";
+ï»¿import { ArrowRight, Box, Ruler } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ARCatalogProduct } from "../types/app";
 import { InlineModelViewer } from "./InlineModelViewer";
@@ -11,8 +11,8 @@ function formatCentimeters(value: number) {
   return Math.round(value * 100);
 }
 
-function buildSceneViewerIntentUrl(product: ARCatalogProduct) {
-  const absoluteGlbUrl = `${window.location.origin}${product.assets.modelGlb}`;
+function buildSceneViewerIntentUrl(product: ARCatalogProduct, modelGlb: string) {
+  const absoluteGlbUrl = `${window.location.origin}${modelGlb}`;
   const params = new URLSearchParams({
     file: absoluteGlbUrl,
     mode: "ar_preferred",
@@ -40,17 +40,22 @@ export default function SceneViewerLauncher({ product }: SceneViewerLauncherProp
     };
   }, []);
 
+  const modelGlb = product.assets.modelGlb?.trim();
+
   const dimensionsLabel = useMemo(() => {
     const width = formatCentimeters(product.dimensionsMeters.width);
     const depth = formatCentimeters(product.dimensionsMeters.depth);
     const height = formatCentimeters(product.dimensionsMeters.height);
 
-    return `${width} × ${depth} × ${height} cm`;
+    return `${width} Ã— ${depth} Ã— ${height} cm`;
   }, [product.dimensionsMeters.depth, product.dimensionsMeters.height, product.dimensionsMeters.width]);
 
-  const intentUrl = useMemo(() => buildSceneViewerIntentUrl(product), [product]);
+  const intentUrl = useMemo(() => (modelGlb ? buildSceneViewerIntentUrl(product, modelGlb) : null), [modelGlb, product]);
 
   const handleLaunch = () => {
+    if (!intentUrl) {
+      return;
+    }
     if (fallbackTimerRef.current) {
       window.clearTimeout(fallbackTimerRef.current);
     }
@@ -153,3 +158,4 @@ export default function SceneViewerLauncher({ product }: SceneViewerLauncherProp
     </main>
   );
 }
+

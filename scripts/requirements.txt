@@ -1,0 +1,9 @@
+﻿torch
+torchvision
+transformers
+accelerate
+Pillow
+numpy
+trimesh
+rembg
+requests

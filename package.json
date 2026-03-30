@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
-    "test:e2e:list": "playwright test --list"
+    "test:e2e:list": "playwright test --list",
+    "assets:placeholders": "node scripts/generate-placeholder-models.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

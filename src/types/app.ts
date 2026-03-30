@@ -1,4 +1,4 @@
-export type ProductCategoryId =
+﻿export type ProductCategoryId =
   | "sofas"
   | "tables"
   | "lighting"
@@ -77,12 +77,30 @@ export interface Product {
 }
 
 export interface ProductAssetBundle {
-  modelGlb: string;
-  modelUsdz: string;
+  modelGlb: string | null;
+  modelUsdz: string | null;
   poster: string;
   images: string[];
 }
 
+
+export type ARCatalogCategory =
+  | "armchair"
+  | "basket"
+  | "candle"
+  | "clock"
+  | "cushion"
+  | "lamp"
+  | "mirror"
+  | "pot"
+  | "rug"
+  | "sculpture"
+  | "shelf"
+  | "sofa"
+  | "table"
+  | "tray"
+  | "vase"
+  | "wall_art";
 export interface ProductDimensionsMeters {
   width: number;
   depth: number;
@@ -104,6 +122,7 @@ export interface ARCatalogProduct {
   price: number;
   currency: string;
   description: string;
+  category: ARCatalogCategory;
   tags: string[];
   assets: ProductAssetBundle;
   dimensionsMeters: ProductDimensionsMeters;
@@ -165,3 +184,7 @@ export interface InspectorState {
   isOpen: boolean;
   targetInstanceId: string | null;
 }
+
+
+
+

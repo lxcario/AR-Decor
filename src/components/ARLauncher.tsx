@@ -1,4 +1,4 @@
-import { type MouseEvent as ReactMouseEvent, useEffect, useRef, useState } from "react";
+﻿import { type MouseEvent as ReactMouseEvent, useEffect, useRef, useState } from "react";
 import type { ARCatalogProduct, ARCapabilityLevel } from "../types/app";
 import { useARCapability } from "../hooks/useARCapability";
 import { trackEvent } from "../hooks/useTracking";
@@ -27,8 +27,8 @@ function LoadingSpinner({ label = "Checking AR support..." }: { label?: string }
   );
 }
 
-async function assetExists(path: string) {
-  if (!path.trim()) {
+async function assetExists(path: string | null | undefined) {
+  if (!path?.trim()) {
     return false;
   }
 
@@ -184,3 +184,4 @@ export default function ARLauncher({ product }: ARLauncherProps) {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { ArrowRight, Box, Ruler } from "lucide-react";
+ï»¿import { ArrowRight, Box, Ruler } from "lucide-react";
 import { useMemo, useRef } from "react";
 import type { ARCatalogProduct } from "../types/app";
 import { PermissionPrompt } from "./PermissionPrompt";
@@ -19,10 +19,10 @@ export default function QuickLookLauncher({ product }: QuickLookLauncherProps) {
     const depth = formatCentimeters(product.dimensionsMeters.depth);
     const height = formatCentimeters(product.dimensionsMeters.height);
 
-    return `${width} × ${depth} × ${height} cm`;
+    return `${width} Ã— ${depth} Ã— ${height} cm`;
   }, [product.dimensionsMeters.depth, product.dimensionsMeters.height, product.dimensionsMeters.width]);
 
-  if (!product.assets.modelUsdz.trim()) {
+  if (!product.assets.modelUsdz?.trim()) {
     return (
       <div className="relative min-h-screen bg-surface-base">
         <PermissionPrompt reason="webxr_unavailable" />
@@ -104,4 +104,5 @@ export default function QuickLookLauncher({ product }: QuickLookLauncherProps) {
     </main>
   );
 }
+
 

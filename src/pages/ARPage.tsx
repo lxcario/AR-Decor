@@ -1,11 +1,19 @@
+﻿import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import type { ARCatalogProduct } from "../types/app";
 import { routes } from "../app/routes";
 import { getARProductBySlug } from "../data/ar-products";
 import ARLauncher from "../components/ARLauncher";
+import { ModelGenerationPrompt } from "../components/ModelGenerationPrompt";
 
 export function ARPage() {
   const { slug } = useParams();
-  const product = slug ? getARProductBySlug(slug) : undefined;
+  const initialProduct = slug ? getARProductBySlug(slug) ?? null : null;
+  const [product, setProduct] = useState<ARCatalogProduct | null>(initialProduct);
+
+  useEffect(() => {
+    setProduct(initialProduct);
+  }, [initialProduct]);
 
   if (!product) {
     return (
@@ -24,6 +32,29 @@ export function ARPage() {
           </Link>
         </div>
       </main>
+    );
+  }
+
+  if (!product.assets.modelGlb) {
+    return (
+      <ModelGenerationPrompt
+        product={product}
+        onModelReady={(modelUrl) => {
+          setProduct((currentProduct) => {
+            if (!currentProduct) {
+              return currentProduct;
+            }
+
+            return {
+              ...currentProduct,
+              assets: {
+                ...currentProduct.assets,
+                modelGlb: modelUrl,
+              },
+            };
+          });
+        }}
+      />
     );
   }
 
