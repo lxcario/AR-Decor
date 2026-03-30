@@ -21,6 +21,10 @@ interface StatusResponse {
   error: string | null;
 }
 
+interface ErrorResponse {
+  error?: string;
+}
+
 interface UseProductModelReturn {
   modelUrl: string | null;
   isGenerating: boolean;
@@ -32,6 +36,31 @@ interface UseProductModelReturn {
 const API_BASE_URL = ((import.meta.env.VITE_PIPELINE_API_BASE_URL as string | undefined)?.trim() ?? '');
 const POLL_INTERVAL_MS = 3000;
 const MAX_POLLS = 60;
+
+function buildRequestHeaders() {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (API_BASE_URL.includes('ngrok')) {
+    headers['ngrok-skip-browser-warning'] = 'true';
+  }
+
+  return headers;
+}
+
+async function getErrorMessage(response: Response, fallback: string) {
+  try {
+    const payload = (await response.json()) as ErrorResponse;
+    if (typeof payload.error === 'string' && payload.error.trim()) {
+      return payload.error;
+    }
+  } catch {
+    // Ignore non-JSON errors and use the fallback below.
+  }
+
+  return fallback;
+}
 
 export function useProductModel(
   productId: string,
@@ -91,14 +120,12 @@ export function useProductModel(
       try {
         const response = await fetch(`${API_BASE_URL}/api/models/generate`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: buildRequestHeaders(),
           body: JSON.stringify({ productId }),
         });
 
         if (!response.ok) {
-          throw new Error('Failed to start model generation');
+          throw new Error(await getErrorMessage(response, 'Failed to start model generation'));
         }
 
         const payload = (await response.json()) as GenerateResponse;
@@ -144,10 +171,14 @@ export function useProductModel(
 
           void (async () => {
             try {
-              const statusResponse = await fetch(`${API_BASE_URL}/api/models/status/${jobId}`);
+              const statusResponse = await fetch(`${API_BASE_URL}/api/models/status/${jobId}`, {
+                headers: API_BASE_URL.includes('ngrok')
+                  ? { 'ngrok-skip-browser-warning': 'true' }
+                  : undefined,
+              });
 
               if (!statusResponse.ok) {
-                throw new Error('Failed to fetch generation status');
+                throw new Error(await getErrorMessage(statusResponse, 'Failed to fetch generation status'));
               }
 
               const statusPayload = (await statusResponse.json()) as StatusResponse;
