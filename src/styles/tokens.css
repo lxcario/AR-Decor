@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+
+  --color-surface-base: #f8f8f7;
+  --color-surface-raised: #f5f1e8;
+  --color-surface-overlay: rgba(0, 0, 0, 0.48);
+  --color-surface-ar-hud: rgba(15, 15, 15, 0.72);
+
+  --color-content-primary: #0f0f0f;
+  --color-content-secondary: #6b7280;
+  --color-content-inverse: #ffffff;
+  --color-content-disabled: #d1d5db;
+
+  --color-brand-primary: #1a1a1a;
+  --color-brand-accent: #b5a48b;
+
+  --color-status-success: #16a34a;
+  --color-status-warning: #d97706;
+  --color-status-error: #dc2626;
+  --color-status-info: #2563eb;
+
+  --color-reticle-idle: rgba(255, 255, 255, 0.6);
+  --color-reticle-ready: rgba(181, 164, 139, 1);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+
+  --font-family-sans: "Inter", system-ui, sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-base: 15px;
+  --font-size-lg: 17px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 380ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-overlay: 100;
+  --z-sheet: 200;
+  --z-hud: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-surface-base: #0f0f0f;
+    --color-surface-raised: #1c1c1c;
+    --color-content-primary: #f5f5f4;
+    --color-content-secondary: #9ca3af;
+    --color-brand-primary: #f5f5f4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @theme {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
