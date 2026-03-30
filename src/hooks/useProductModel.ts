@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export type JobStatus =
   | 'queued'
@@ -29,7 +29,7 @@ interface UseProductModelReturn {
   requestGeneration: () => void;
 }
 
-const API_BASE_URL = (import.meta.env.VITE_PIPELINE_API_BASE_URL as string | undefined) ?? 'http://localhost:3001';
+const API_BASE_URL = ((import.meta.env.VITE_PIPELINE_API_BASE_URL as string | undefined)?.trim() ?? '');
 const POLL_INTERVAL_MS = 3000;
 const MAX_POLLS = 60;
 

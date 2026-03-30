@@ -1,4 +1,4 @@
-﻿import { serve } from '@hono/node-server';
+import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
@@ -8,7 +8,7 @@ import { productsRouter } from './routes/products.js';
 
 const app = new Hono();
 
-app.use('*', cors({ origin: 'http://localhost:5173' }));
+app.use('*', cors({ origin: '*', allowMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'] }));
 app.use('*', logger());
 
 app.route('/api/models', modelsRouter);

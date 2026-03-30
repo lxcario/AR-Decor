@@ -1,7 +1,20 @@
-const usdFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-});
+const formatterCache = new Map<string, Intl.NumberFormat>();
 
-export const formatUsd = (value: number) => usdFormatter.format(value);
+export function formatCurrency(value: number, currency = "TRY") {
+  const locale = currency === "TRY" ? "tr-TR" : "en-US";
+  const cacheKey = `${locale}:${currency}`;
+
+  let formatter = formatterCache.get(cacheKey);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency,
+      maximumFractionDigits: 0,
+    });
+    formatterCache.set(cacheKey, formatter);
+  }
+
+  return formatter.format(value);
+}
+
+export const formatUsd = (value: number) => formatCurrency(value, "TRY");

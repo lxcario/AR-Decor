@@ -1,16 +1,11 @@
 import type { ARCatalogProduct } from "../types/app";
+import { formatCurrency } from "../lib/currency";
 
 interface CatalogCardProps {
   product: ARCatalogProduct;
   onSelect: (product: ARCatalogProduct) => void;
   isSelected?: boolean;
 }
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-});
 
 export function CatalogCard({ product, onSelect, isSelected = false }: CatalogCardProps) {
   return (
@@ -33,9 +28,7 @@ export function CatalogCard({ product, onSelect, isSelected = false }: CatalogCa
         <p className="text-xs uppercase tracking-[0.18em] text-content-secondary">{product.brand}</p>
         <div>
           <h3 className="text-base font-semibold text-content-primary">{product.name}</h3>
-          <p className="mt-1 text-sm text-content-secondary">
-            {currencyFormatter.format(product.price)}
-          </p>
+          <p className="mt-1 text-sm text-content-secondary">{formatCurrency(product.price, product.currency)}</p>
         </div>
       </div>
     </button>

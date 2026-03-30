@@ -4,49 +4,50 @@ export const categories: ProductCategory[] = [
   {
     id: "sofas",
     label: "Sofas",
-    description: "Cloud-soft silhouettes in creamy boucles and tailored linens.",
-    coverImage:
-      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80",
-    accentLabel: "Relaxed tailoring",
+    description: "Room-anchoring silhouettes with real-world dimensions ready for AR.",
+    coverImage: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&q=80",
+    accentLabel: "Scaled seating",
   },
   {
     id: "tables",
     label: "Tables",
-    description: "Travertine, smoked oak, and sculptural forms for quiet statement rooms.",
-    coverImage:
-      "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
-    accentLabel: "Stone and oak",
+    description: "Side tables and surfaces with sculptural profiles and grounded placement.",
+    coverImage: "https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=800&q=80",
+    accentLabel: "Stone and form",
   },
   {
     id: "lighting",
     label: "Lighting",
-    description: "Atmospheric lighting designed to soften hard architectural lines.",
-    coverImage:
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+    description: "Lamps and wall pieces that add soft ambience and clean silhouettes.",
+    coverImage: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&q=80",
     accentLabel: "Ambient glow",
   },
   {
     id: "seating",
     label: "Seating",
-    description: "Editorial accent chairs and ottomans with collectible character.",
-    coverImage:
-      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
-    accentLabel: "Collector forms",
+    description: "Accent seating with compact footprints and strong visual presence.",
+    coverImage: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80",
+    accentLabel: "Curved comfort",
   },
   {
     id: "storage",
     label: "Storage",
-    description: "Low-profile storage pieces that feel built into the room.",
-    coverImage:
-      "https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&w=1200&q=80",
+    description: "Shelves and utility pieces that read as architecture, not clutter.",
+    coverImage: "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?w=800&q=80",
     accentLabel: "Architectural calm",
+  },
+  {
+    id: "textiles",
+    label: "Textiles",
+    description: "Rugs and soft goods that ground the room with pattern and texture.",
+    coverImage: "https://images.unsplash.com/photo-1600166898405-da9535204843?w=800&q=80",
+    accentLabel: "Soft layers",
   },
   {
     id: "decor",
     label: "Decor",
-    description: "Warm finishing pieces that bring texture and softness to a space.",
-    coverImage:
-      "https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=1200&q=80",
-    accentLabel: "Layered warmth",
+    description: "Smaller styling pieces for tables, shelves, walls, and collected corners.",
+    coverImage: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=800&q=80",
+    accentLabel: "Collected details",
   },
 ];

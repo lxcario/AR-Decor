@@ -1,4 +1,4 @@
-﻿import {
+import {
   ArrowRight,
   Camera,
   Compass,
@@ -59,7 +59,7 @@ export function GuidePage() {
           <div className="rounded-[24px] border border-neutral-200/60 bg-[#fcfbf8] p-4">
             <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Catalog</p>
             <p className="mt-2 text-2xl font-semibold text-neutral-950">{products.length}</p>
-            <p className="mt-1 text-xs text-neutral-500">AR-ready pieces</p>
+            <p className="mt-1 text-xs text-neutral-500">catalog pieces</p>
           </div>
           <div className="rounded-[24px] border border-neutral-200/60 bg-[#fcfbf8] p-4">
             <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Rooms</p>
