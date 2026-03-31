@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import io
@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 MODEL_ID = "depth-anything/Depth-Anything-V2-Small-hf"
-GRID_RESOLUTION = 192
+GRID_RESOLUTION = 256
 TEXTURE_SIZE = 512
 LONGEST_SIDE = 1024
 GAUSSIAN_RADIUS = 2
@@ -152,6 +152,24 @@ def normalize_depth(depth_map, alpha_mask, runtime):
     return np.asarray(blurred, dtype=np.float32) / 255.0
 
 
+def create_masked_rgb_image(rgb_image, alpha_mask, runtime):
+    np = runtime["np"]
+    Image = runtime["Image"]
+
+    rgb_array = np.asarray(rgb_image, dtype=np.uint8)
+    foreground_mask = alpha_mask >= (128.0 / 255.0)
+
+    if np.any(foreground_mask):
+        foreground_pixels = rgb_array[foreground_mask]
+        mean_foreground = np.round(foreground_pixels.mean(axis=0)).astype(np.uint8)
+    else:
+        mean_foreground = np.array([255, 255, 255], dtype=np.uint8)
+
+    masked_rgb = rgb_array.copy()
+    masked_rgb[~foreground_mask] = mean_foreground
+    return Image.fromarray(masked_rgb, mode="RGB")
+
+
 def build_faces(grid_size: int, np):
     faces = []
     for row in range(grid_size - 1):
@@ -160,8 +178,51 @@ def build_faces(grid_size: int, np):
             top_right = top_left + 1
             bottom_left = top_left + grid_size
             bottom_right = bottom_left + 1
-            faces.append([top_left, bottom_left, top_right])
-            faces.append([top_right, bottom_left, bottom_right])
+            faces.append([top_left, top_right, bottom_left])
+            faces.append([bottom_left, top_right, bottom_right])
+    return np.asarray(faces, dtype=np.int64)
+
+
+def build_face_mask(alpha_grid, faces, np):
+    face_alpha = alpha_grid.reshape(-1)[faces].mean(axis=1)
+    return face_alpha >= 0.1
+
+
+def build_boundary_edges(filtered_faces):
+    edge_counts = {}
+
+    for face in filtered_faces:
+        oriented_edges = (
+            (int(face[0]), int(face[1])),
+            (int(face[1]), int(face[2])),
+            (int(face[2]), int(face[0])),
+        )
+        for start, end in oriented_edges:
+            key = tuple(sorted((start, end)))
+            if key not in edge_counts:
+                edge_counts[key] = {
+                    "count": 0,
+                    "edge": (start, end),
+                }
+            edge_counts[key]["count"] += 1
+
+    return [
+        value["edge"]
+        for value in edge_counts.values()
+        if value["count"] == 1
+    ]
+
+
+def build_wall_faces(boundary_edges, back_offset: int, np):
+    if not boundary_edges:
+        return np.empty((0, 3), dtype=np.int64)
+
+    faces = []
+    for start, end in boundary_edges:
+        back_start = start + back_offset
+        back_end = end + back_offset
+        faces.append([start, end, back_start])
+        faces.append([end, back_end, back_start])
     return np.asarray(faces, dtype=np.int64)
 
 
@@ -171,6 +232,7 @@ def build_displaced_mesh(rgba_image, normalized_depth, width_m: float, height_m:
     trimesh = runtime["trimesh"]
     TextureVisuals = runtime["TextureVisuals"]
     SimpleMaterial = runtime["SimpleMaterial"]
+    ColorVisuals = trimesh.visual.ColorVisuals
 
     depth_strength = max(depth_m, 1e-4) * depth_multiplier
 
@@ -199,12 +261,43 @@ def build_displaced_mesh(rgba_image, normalized_depth, width_m: float, height_m:
     vertices = np.column_stack((xx.reshape(-1), yy.reshape(-1), zz.reshape(-1))).astype(np.float32)
     uv = np.column_stack((uu.reshape(-1), vv.reshape(-1))).astype(np.float32)
     faces = build_faces(GRID_RESOLUTION, np)
+    face_mask = build_face_mask(alpha_grid, faces, np)
+    filtered_faces = faces[face_mask]
+
+    if len(filtered_faces) == 0:
+        filtered_faces = faces
+
+    boundary_edges = build_boundary_edges(filtered_faces)
 
     texture_image = rgba_image.resize((TEXTURE_SIZE, TEXTURE_SIZE), Image.Resampling.LANCZOS)
     material = SimpleMaterial(image=texture_image)
     visual = TextureVisuals(uv=uv, material=material)
-    mesh = trimesh.Trimesh(vertices=vertices, faces=faces, visual=visual, process=False)
-    return mesh
+    front_mesh = trimesh.Trimesh(vertices=vertices, faces=filtered_faces, visual=visual, process=False)
+
+    back_z = float(vertices[:, 2].min()) - 0.01
+    back_vertices = vertices.copy()
+    back_vertices[:, 2] = back_z
+    back_faces = filtered_faces[:, ::-1]
+    neutral_face_colors = np.tile(np.array([[214, 209, 201, 255]], dtype=np.uint8), (len(back_faces), 1))
+    back_visual = ColorVisuals(face_colors=neutral_face_colors)
+    back_mesh = trimesh.Trimesh(vertices=back_vertices, faces=back_faces, visual=back_visual, process=False)
+
+    meshes = [front_mesh, back_mesh]
+
+    if boundary_edges:
+        wall_vertices = np.vstack((vertices, back_vertices)).astype(np.float32)
+        wall_faces = build_wall_faces(boundary_edges, len(vertices), np)
+        wall_face_colors = np.tile(np.array([[200, 194, 184, 255]], dtype=np.uint8), (len(wall_faces), 1))
+        wall_visual = ColorVisuals(face_colors=wall_face_colors)
+        wall_mesh = trimesh.Trimesh(vertices=wall_vertices, faces=wall_faces, visual=wall_visual, process=False)
+        meshes.append(wall_mesh)
+
+    for mesh in meshes:
+        if isinstance(mesh, trimesh.Trimesh):
+            mesh.fix_normals()
+            
+    scene = trimesh.Scene(meshes)
+    return scene
 
 
 def export_mesh(mesh, output_path: Path):
@@ -233,8 +326,9 @@ def main() -> int:
     else:
         rgba_image = rgba_image.convert("RGBA")
 
-    depth_map = estimate_depth(rgb_image, runtime)
     alpha_mask = np.asarray(rgba_image.getchannel("A"), dtype=np.float32) / 255.0
+    masked_rgb_image = create_masked_rgb_image(rgb_image, alpha_mask, runtime)
+    depth_map = estimate_depth(masked_rgb_image, runtime)
     normalized_depth = normalize_depth(depth_map, alpha_mask, runtime)
 
     mesh = build_displaced_mesh(
@@ -264,4 +358,3 @@ if __name__ == "__main__":
     except Exception as exc:
         print(f"ERROR:{exc}")
         sys.exit(1)
-

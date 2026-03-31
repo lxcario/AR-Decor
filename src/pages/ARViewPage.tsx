@@ -1,4 +1,4 @@
-﻿import { type PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from "react";
+import { type PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   Camera,
@@ -263,24 +263,24 @@ export function ARViewPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0d0b0a] px-4 pb-6 pt-[calc(1rem+env(safe-area-inset-top))] text-white">
+    <main className="min-h-screen bg-white px-4 pb-6 pt-[calc(1rem+env(safe-area-inset-top))] text-neutral-900">
       <div className="flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={handleBack}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/12 backdrop-blur-xl transition-all duration-200 active:scale-95"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-neutral-100 border border-neutral-200 transition-all duration-200 active:scale-95 text-neutral-900"
           aria-label="Back to product"
         >
           <ArrowLeft size={18} />
         </button>
 
-        <div className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-white/82 backdrop-blur-xl">
+        <div className="rounded-full border border-brand-accent/20 bg-brand-accent/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-brand-accent font-semibold">
           {statusLabel}
         </div>
 
         <Link
           to={routes.product(product.slug)}
-          className="inline-flex h-11 items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.18em] text-white/82 backdrop-blur-xl transition-all duration-200 active:scale-95"
+          className="inline-flex h-11 items-center rounded-full border border-neutral-200 bg-neutral-100 px-4 py-2 text-xs uppercase tracking-[0.18em] text-neutral-900 font-medium transition-all duration-200 active:scale-95"
         >
           Details
         </Link>
@@ -288,7 +288,7 @@ export function ARViewPage() {
 
       <section
         ref={previewRef}
-        className="relative mt-4 min-h-[78vh] overflow-hidden rounded-[40px] border border-white/10 bg-[#181412] shadow-[0_32px_100px_rgba(0,0,0,0.38)]"
+        className="relative mt-4 min-h-[78vh] overflow-hidden rounded-[40px] border border-neutral-200 bg-neutral-100 shadow-2xl"
       >
         <video
           ref={videoRef}

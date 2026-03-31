@@ -1,4 +1,4 @@
-﻿import { Component, Suspense, useEffect, useMemo, useState } from "react";
+import { Component, Suspense, useEffect, useMemo, useState } from "react";
 import type { ErrorInfo, ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Center, Html, OrbitControls, useGLTF } from "@react-three/drei";
@@ -127,7 +127,7 @@ export function InlineModelViewer({ product, className = "" }: InlineModelViewer
         <Canvas
           camera={{ position: cameraPosition, fov: 36 }}
           dpr={[1, 1.5]}
-          gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}
+          gl={{ antialias: true, alpha: true }}
           className="h-full w-full"
         >
           <color attach="background" args={["#ede7dd"]} />

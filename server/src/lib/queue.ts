@@ -1,4 +1,4 @@
-﻿import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import type { JobStatus, ModelJob, ModelStrategy } from '../types/pipeline.js';
 
 // In-memory queue. Restarts clear the queue — that is acceptable.
@@ -159,6 +159,13 @@ class ModelQueue {
         });
       })
       .finally(() => {
+        // Clean up from memory after 5 minutes to prevent leak, allowing final polls to complete
+        setTimeout(() => {
+          this.jobs.delete(nextJob.jobId);
+          this.runners.delete(nextJob.jobId);
+          this.productIndex.delete(nextJob.productId);
+        }, 5 * 60 * 1000);
+
         this.running -= 1;
         this.processNext();
       });

@@ -74,12 +74,17 @@ export function useProductModel(
   const intervalRef = useRef<number | null>(null);
   const isMountedRef = useRef(true);
   const activeJobIdRef = useRef<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     isMountedRef.current = true;
 
     return () => {
       isMountedRef.current = false;
+
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
 
       if (intervalRef.current !== null) {
         window.clearInterval(intervalRef.current);
@@ -117,11 +122,18 @@ export function useProductModel(
     setGenerationStatus('queued');
 
     void (async () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      abortControllerRef.current = new AbortController();
+      const signal = abortControllerRef.current.signal;
+
       try {
         const response = await fetch(`${API_BASE_URL}/api/models/generate`, {
           method: 'POST',
           headers: buildRequestHeaders(),
           body: JSON.stringify({ productId }),
+          signal,
         });
 
         if (!response.ok) {
@@ -175,6 +187,7 @@ export function useProductModel(
                 headers: API_BASE_URL.includes('ngrok')
                   ? { 'ngrok-skip-browser-warning': 'true' }
                   : undefined,
+                signal,
               });
 
               if (!statusResponse.ok) {
@@ -207,7 +220,7 @@ export function useProductModel(
               clearPolling();
               activeJobIdRef.current = null;
 
-              if (!isMountedRef.current) {
+              if (!isMountedRef.current || (pollError instanceof Error && pollError.name === 'AbortError')) {
                 return;
               }
 
@@ -221,7 +234,7 @@ export function useProductModel(
         clearPolling();
         activeJobIdRef.current = null;
 
-        if (!isMountedRef.current) {
+        if (!isMountedRef.current || (generationError instanceof Error && generationError.name === 'AbortError')) {
           return;
         }
 

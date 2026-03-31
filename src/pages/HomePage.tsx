@@ -1,4 +1,4 @@
-﻿import { startTransition, useDeferredValue, useState } from "react";
+import { startTransition, useDeferredValue, useState } from "react";
 import { ArrowRight, Search, SlidersHorizontal, Sparkles, Star } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { Link } from "react-router-dom";
@@ -94,13 +94,13 @@ export function HomePage() {
               A softer, more editorial way to browse pieces before placing them in your room.
             </p>
           </div>
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-neutral-200/70 bg-white/90 text-sm font-semibold text-neutral-900 shadow-[0_10px_30px_rgba(32,24,18,0.08)] backdrop-blur-xl">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-neutral-200 bg-white text-sm font-semibold text-neutral-900 shadow-sm">
             AD
           </div>
         </div>
 
-        <div className="mt-6 rounded-[34px] border border-neutral-200/60 bg-white/88 p-4 shadow-[0_18px_60px_rgba(32,24,18,0.06)] backdrop-blur-xl">
-          <div className="flex items-center gap-3 rounded-full border border-neutral-200/70 bg-[#fcfbf8] px-4 py-3">
+        <div className="mt-6 rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-3 rounded-full border border-neutral-100 bg-neutral-50 px-4 py-3">
             <Search size={18} className="text-neutral-400" />
             <input
               value={query}
@@ -115,14 +115,14 @@ export function HomePage() {
               type="button"
               onClick={clearFilters}
               disabled={!isFiltering}
-              className="inline-flex items-center gap-2 rounded-full border border-neutral-200/70 bg-white px-3 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-neutral-700 transition-all duration-200 active:scale-95 disabled:cursor-default disabled:opacity-45 disabled:active:scale-100"
+              className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-brand-accent transition-all duration-200 active:scale-95 disabled:cursor-default disabled:opacity-45 disabled:active:scale-100"
             >
               <SlidersHorizontal size={14} />
               <span>Reset</span>
             </button>
           </div>
 
-          <div className="mt-4 flex items-center justify-between gap-4 rounded-[24px] border border-neutral-200/60 bg-[#fcfbf8] px-4 py-4">
+          <div className="mt-4 flex items-center justify-between gap-4 rounded-3xl border border-neutral-100 bg-neutral-50 px-4 py-4">
             <div>
               <p className="text-xs uppercase tracking-[0.24em] text-neutral-500">Current edit</p>
               <p className="mt-1 text-sm font-medium text-neutral-900">
@@ -142,7 +142,7 @@ export function HomePage() {
         transition={{ delay: 0.08, duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         className="mt-7"
       >
-        <article className="overflow-hidden rounded-[38px] rounded-bl-[72px] border border-neutral-200/60 bg-neutral-950 text-white shadow-[0_24px_80px_rgba(18,18,18,0.18)]">
+        <article className="overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-950 text-white shadow-xl">
           <div className="relative min-h-[430px]">
             <img
               src={heroProduct.heroImage.src}
@@ -150,18 +150,18 @@ export function HomePage() {
               referrerPolicy="no-referrer"
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,16,16,0.12),rgba(16,16,16,0.36)_35%,rgba(16,16,16,0.92)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(with-transparent)] bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute inset-x-5 top-5 flex items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-white/78 backdrop-blur-xl">
+              <div className="inline-flex items-center gap-2 rounded-full bg-brand-accent/90 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-white shadow-sm overflow-hidden backdrop-blur-md">
                 <Sparkles size={13} />
                 <span>Editor’s placement pick</span>
               </div>
-              <div className="rounded-full bg-black/28 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-white/82 backdrop-blur-xl">
+              <div className="rounded-full bg-black/40 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-white backdrop-blur-md border border-white/20">
                 {formatUsd(heroProduct.priceUsd)}
               </div>
             </div>
             <div className="absolute inset-x-5 bottom-5">
-              <div className="rounded-[30px] border border-white/15 bg-black/28 p-5 shadow-[0_18px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl">
+              <div className="rounded-3xl border border-white/20 bg-black/40 backdrop-blur-md p-5 shadow-2xl">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.24em] text-white/60">{heroProduct.collection}</p>
@@ -224,11 +224,11 @@ export function HomePage() {
                   aria-pressed={isActive}
                   className={`inline-flex items-center gap-3 rounded-full border px-4 py-3 text-left transition-all duration-200 active:scale-95 ${
                     isActive
-                      ? "border-neutral-950 bg-neutral-950 text-white shadow-[0_14px_40px_rgba(18,18,18,0.14)]"
-                      : "border-neutral-200/70 bg-white/88 text-neutral-900 shadow-[0_10px_30px_rgba(32,24,18,0.05)]"
+                      ? "border-brand-primary bg-brand-primary text-white shadow-md shadow-brand-primary/20"
+                      : "border-neutral-200 bg-white text-neutral-900 shadow-sm"
                   }`}
                 >
-                  <span className="h-10 w-10 overflow-hidden rounded-full border border-black/8 bg-[#f1ebe2]">
+                  <span className="h-10 w-10 overflow-hidden rounded-full border border-neutral-100 bg-neutral-50">
                     <img
                       src={category.coverImage}
                       alt={`${category.label} preview`}
@@ -255,7 +255,7 @@ export function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 overflow-hidden rounded-[36px] border border-neutral-200/60 bg-white/90 shadow-[0_20px_70px_rgba(32,24,18,0.06)]"
+            className="mt-4 overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-lg"
           >
             <div className="relative h-56">
               <img
@@ -264,12 +264,12 @@ export function HomePage() {
                 referrerPolicy="no-referrer"
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,16,16,0.06),rgba(16,16,16,0.7))]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute inset-x-5 top-5 flex items-center justify-between gap-3">
-                <div className="rounded-full border border-white/14 bg-white/10 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-white/80 backdrop-blur-xl">
+                <div className="rounded-full border border-white/20 bg-black/30 backdrop-blur-md px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-white/90">
                   {activeCategoryMeta.accentLabel}
                 </div>
-                <div className="rounded-full bg-black/26 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/80 backdrop-blur-xl">
+                <div className="rounded-full border border-white/20 bg-brand-accent/80 backdrop-blur-md px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white">
                   {activeCategoryMeta.label}
                 </div>
               </div>
@@ -309,20 +309,20 @@ export function HomePage() {
           <p className="text-sm text-neutral-500">{visibleProducts.length} {resultLabel}</p>
         </div>
 
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
           {leadProduct ? (
-            <motion.div layout className="mt-4 grid grid-cols-2 gap-4">
+            <motion.div className="mt-4 grid grid-cols-2 gap-4">
               <motion.div
                 key={leadProduct.id}
-                layout
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.2 }}
                 className="col-span-2"
               >
                 <Link
                   to={routes.product(leadProduct.slug)}
-                  className="group block overflow-hidden rounded-[36px] border border-neutral-200/60 bg-white/92 shadow-[0_20px_70px_rgba(32,24,18,0.06)] transition-all duration-200 active:scale-95"
+                  className="group block overflow-hidden rounded-[24px] border border-neutral-200 bg-white shadow-sm transition-all duration-200 active:scale-95"
                 >
                   <div className="relative min-h-[270px]">
                     <img
@@ -334,10 +334,10 @@ export function HomePage() {
                     <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,16,16,0.86),rgba(16,16,16,0.18)_62%)]" />
                     <div className="relative flex h-full flex-col justify-between p-5 text-white">
                       <div className="flex items-center justify-between gap-3">
-                        <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/78 backdrop-blur-xl">
+                        <span className="rounded-full border border-white/20 bg-black/40 backdrop-blur-md px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/90">
                           {leadProduct.badge ?? leadProduct.collection}
                         </span>
-                        <span className="rounded-full bg-white/12 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/82 backdrop-blur-xl">
+                        <span className="rounded-full bg-brand-accent/90 border border-white/10 backdrop-blur-md px-3 py-1.5 text-[11px] font-medium tracking-wide text-white">
                           {formatUsd(leadProduct.priceUsd)}
                         </span>
                       </div>
@@ -358,15 +358,14 @@ export function HomePage() {
               {secondaryProducts.map((product, index) => (
                 <motion.div
                   key={product.id}
-                  layout
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ delay: index * 0.04, duration: 0.28 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ delay: index * 0.04, duration: 0.2 }}
                 >
                   <Link
                     to={routes.product(product.slug)}
-                    className="group block overflow-hidden rounded-[30px] border border-neutral-200/60 bg-white/92 shadow-[0_18px_60px_rgba(32,24,18,0.05)] transition-all duration-200 active:scale-95"
+                    className="group block h-full overflow-hidden rounded-[24px] border border-neutral-200 bg-white shadow-sm transition-all duration-200 active:scale-95"
                   >
                     <div className="relative">
                       <img
@@ -376,16 +375,16 @@ export function HomePage() {
                         className="aspect-[0.8] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                       />
                       <div className="absolute inset-x-3 top-3 flex items-center justify-between gap-2">
-                        <span className="rounded-full bg-white/88 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-700 backdrop-blur-md">
+                        <span className="rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-neutral-700 shadow-sm">
                           {product.collection}
                         </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-neutral-950/82 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-md">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-black/80 backdrop-blur-md px-2.5 py-1 text-[11px] font-medium text-white border border-white/10">
                           <Star size={12} fill="currentColor" strokeWidth={0} />
                           {product.rating.toFixed(1)}
                         </span>
                       </div>
                     </div>
-                    <div className="space-y-3 p-4">
+                    <div className="space-y-3 p-4 bg-neutral-50/50">
                       <div>
                         <h3 className="text-base font-medium leading-snug text-neutral-950">{product.name}</h3>
                         <p className="mt-2 text-sm leading-6 text-neutral-600">{product.shortDescription}</p>

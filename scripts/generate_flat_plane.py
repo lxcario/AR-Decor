@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import io
@@ -68,7 +68,12 @@ def build_plane(width_m: float, secondary_m: float, placement: str, texture_imag
         vertices[:, 0] -= float(vertices[:, 0].min())
         vertices[:, 1] -= (float(vertices[:, 1].min()) + float(vertices[:, 1].max())) / 2.0
 
-    faces = np.array([[0, 2, 1], [1, 2, 3]], dtype=np.int64)
+    if placement == "floor":
+        faces = np.array([[0, 2, 1], [1, 2, 3]], dtype=np.int64)
+    else:
+        # Wall faces must face +Z (CCW)
+        faces = np.array([[0, 1, 2], [1, 3, 2]], dtype=np.int64)
+
     uv = np.array([[0.0, 1.0], [1.0, 1.0], [0.0, 0.0], [1.0, 0.0]], dtype=np.float32)
     material = SimpleMaterial(image=texture_image)
     visual = TextureVisuals(uv=uv, material=material)
